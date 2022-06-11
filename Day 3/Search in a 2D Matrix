@@ -1,0 +1,23 @@
+#include <vector>
+bool bs(vector<int>arr,int left,int right,int key)
+{
+    while(left<right)
+    {
+        int mid=(left+right)/2;
+        if(arr[mid]==key) return true;
+        else if(arr[mid]>key) right=mid-1;
+        else left=mid+1;
+    }
+    return false;
+}
+bool findTargetInMatrix(vector < vector < int >> & mat, int m, int n, int target) {
+    for(int i=0;i<m;i++)
+    {
+        
+            if(mat[i][0]==target || mat[i][n-1]==target) return true;
+            else if(mat[i][0]<target and mat[i][n-1]>target)
+                return bs(mat[i],0,n-1,target);
+        
+    }
+    return false;
+}
