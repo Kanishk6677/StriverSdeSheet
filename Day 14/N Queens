@@ -1,55 +1,58 @@
-bool possible(vector<vector<int>>&ans,int x,int y)
-{
-    int n=ans.size();
-    for(int i=0;i<x;i++)
+class Solution {
+public:
+    bool isSafe(int i,int j,vector<string>board,int n)
     {
-        if(ans[i][y]==1)
-            return false;
+        int dupcol=j;
+        int duprow=i;
+        while(i>=0 and j>=0)
+        {
+            if(board[i][j]=='Q') return false;
+            i--;
+            j--;
+        }
+        i=duprow;
+        j=dupcol;
+        while(j>=0)
+        {
+            if(board[i][j]=='Q') return false;
+            j--;
+        }
+        i=duprow;
+        j=dupcol;
+        while(i<n and j>=0)
+        {
+            if(board[i][j]=='Q') return false;
+            i++;
+            j--;
+        }
+        return true;
     }
-    for(int i=x-1,j=y-1;i>=0&&j>=0;i--,j--)
+    void f(int col,  vector<vector<string>>&ans,vector<string>&board,int n)
     {
-        if(ans[i][j]==1)
-            return false;
+        if(col==n)
+        {
+            ans.push_back(board);
+            return;
+        }
+        for(int row=0;row<n;row++)
+        {
+            if(isSafe(row,col,board,n))
+            {
+                board[row][col]='Q';
+                f(col+1,ans,board,n);
+                board[row][col]='.';
+            }
+        }
     }
-    for(int i=x-1,j=y+1;i>=0 && j<n;i--,j++)
-    {
-        if(ans[i][j]==1)
-            return false;
+    vector<vector<string>> solveNQueens(int n) {
+       string s(n,'.');
+        vector<string>board(n);
+        for(int i=0;i<n;i++)
+        {
+            board[i]=s;
+        }
+        vector<vector<string>>ans;
+        f(0,ans,board,n);
+        return ans;
     }
-    return true;    
-}
-
-bool helper(vector<vector<int>>&output,vector<vector<int>>&ans,int n,int i=0)
-{
-    if(i>=n)
-    {
-        vector<int>temp;
-        for(auto i:ans)
-            for(auto j:i)
-                temp.push_back(j);
-        output.push_back(temp);
-        return false;
-    }
-        
-    for(int j=0;j<n;j++)
-    {
-          if(possible(ans,i,j))
-          {
-              ans[i][j]=1;
-              bool b=helper(output,ans,n,i+1);
-              if(b==false)
-                  ans[i][j]=0;
-              else
-                  return true;
-          }
-    }
-    return false;
-}
-
-vector<vector<int>> solveNQueens(int n) {
-    // Write your code here.
-    vector<vector<int>>ans(n,vector<int>(n,0));
-    vector<vector<int>>output;
-    helper(output,ans,n);
-    return output;
-}
+};
