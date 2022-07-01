@@ -1,0 +1,81 @@
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#include<bits/stdc++.h>
+int helper(int i,int n,vector<int> &values,vector<vector<int>> &dp){
+    
+    if(n==0){
+        return 0;
+    }
+    if(i==0){
+      return n*values[i];
+    }
+    if(dp[i][n]!=-1){
+        return dp[i][n];
+    }
+    int nottake=helper(i-1,n,values,dp);
+    int take=INT_MIN;
+    if(i+1<=n){
+        take=values[i]+helper(i,n-i-1,values,dp);
+    }
+    int ans=max(take,nottake);
+    dp[i][n]=ans;
+    return dp[i][n];
+}
+int cutRod(vector<int> &values, int n)
+{
+    // Write your code here.
+//     vector<vector<int>> dp(n,vector<int>(n+1,-1));
+    vector<vector<int>> dp(n,vector<int>(n+1));
+    for(int i=0;i<=n-1;i++){
+        dp[i][0]=0;
+    }
+    for(int j=0;j<=n;j++){
+        dp[0][j]=j*values[0];
+    }
+    for(int i=1;i<=n-1;i++){
+        for(int j=1;j<=n;j++){
+            int nottake=dp[i-1][j];
+            int take=INT_MIN;
+            if(i+1<=j){
+                take=values[i]+dp[i][j-i-1];
+            }
+            int ans=max(take,nottake);
+            dp[i][j]=ans;
+        }
+    }
+//     int ans=helper(n-1,n,price,dp);
+    return dp[n-1][n];
+}
+
+	
+
