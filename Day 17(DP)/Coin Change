@@ -1,0 +1,21 @@
+#include<bits/stdc++.h>
+long f(int *arr,int i,int value,vector<vector<long>>&dp)
+{
+    if(i==0)
+    {
+        return (value%arr[0]==0);
+    }
+    if(dp[i][value]!=-1) return dp[i][value];
+    long nt=f(arr,i-1,value,dp);
+    long t=0;
+    if(arr[i]<=value)
+        t=f(arr,i,value-arr[i],dp);
+    return dp[i][value]=nt+t;
+}
+long countWaysToMakeChange(int *arr, int n, int value)
+{
+    vector<vector<long>>dp(n,vector<long>(value+1,-1));
+    return f(arr,n-1,value,dp);
+}
+
+// Tabulation
